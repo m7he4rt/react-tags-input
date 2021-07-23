@@ -6,9 +6,9 @@
     "build": "webpack --config config/webpack.prod.js",
     "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
     "start": "webpack serve --config config/webpack.dev.js",
-    "test": "jest --passWithNoTests --no-cache --runInBand",
-    "test:watch": "npm test -- --watchAll",
-    "test:ci": "npm test -- --coverage"
+    "test": "jest",
+    "test:watch": "yarn test -- --watchAll",
+    "test:ci": "yarn test -- --coverage"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
@@ -17,15 +17,18 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.14.5",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^13.2.0",
+    "@types/jest": "^26.0.24",
     "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
     "babel-jest": "^27.0.2",
     "clean-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^5.3.1",
-    "jest": "^27.0.4",
+    "jest": "^27.0.6",
     "prettier": "^2.3.2",
     "source-map-loader": "^3.0.0",
     "svg-jest": "^1.0.1",
