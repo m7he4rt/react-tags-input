@@ -1,29 +1,63 @@
-import React, { useState } from 'react';
-import TagsInput from './TagsInput';
+import React from 'react';
+import { Card, CardMedia, Box, makeStyles, CssBaseline } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+
+import TagsInput from '@/components/TagInput';
+import ListEmails from './components/ListEmails';
+
+import { emails } from '@/mock/emails'
+import { TagProvider } from '@/context/TagContext';
+
+const useStyles = makeStyles({
+  root: {
+    backgroundColor: grey[200],
+    width: '100vw',
+    minHeight: '100vh',
+  },
+  card: {
+    minWidth: 800,
+    maxWidth: 800,
+    padding: 60,
+  },
+  media: {
+    height: 190,
+    marginBottom: 30,
+  },
+});
 
 const App: React.FC = () => {
-  function handleSelecetedTags(items: string[]) {
-    return items;
-  }
-
-  const [tags, setTags] = useState<string[]>([
-    "contato@rarolabs.com.br",
-    "nao-responda@rarolabs.com.br"
-  ]);
+  const classes = useStyles();
 
   return (
-    <div className="App">
-      <TagsInput
-        onSelectTags={handleSelecetedTags}
-        fullWidth
-        variant="outlined"
-        id="tags"
-        name="tags"
-        placeholder="add Tags"
-        label="tags"
-        tags={tags}
-      />
-    </div>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      className={classes.root}
+    >
+      <CssBaseline />
+      <Card className={classes.card}>
+        <CardMedia
+          className={classes.media}
+          image="https://www.rarolabs.com.br/img/logo_raro.svg"
+          title="Logo Raro Labs"
+        />
+
+        <TagProvider>
+          <TagsInput
+            fullWidth
+            variant="outlined"
+            id="tags"
+            name="tags"
+            placeholder="Add your emails"
+            label="Email"
+            tags={emails}
+          />
+
+          <ListEmails />
+        </TagProvider>
+      </Card>
+    </Box>
   );
 }
 
