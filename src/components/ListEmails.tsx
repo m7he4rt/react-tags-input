@@ -10,10 +10,9 @@ const ListEmails = () => {
     <List>
       <Grid container spacing={1}>
         {items.map(item => (
-          <Grid item xs key={`key-${item.id}`}>
+          <Grid item xs key={`key-${item}`}>
             <ListItemText 
-              primary={item.email}
-              secondary={`ID: ${item.id}`}
+              primary={item}
             />
           </Grid>
         ))}

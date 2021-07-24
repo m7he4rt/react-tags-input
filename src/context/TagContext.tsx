@@ -5,66 +5,62 @@ import React, {
   Dispatch,
 } from 'react'
 
-import { ItemProps } from '@/common/Item';
 import { WithChildren } from '@/common/Children';
 
 import { emailRegex } from '@/utils/regex';
-import { generateRandomId } from '@/utils/generateRandomId';
 
 type TagContextProps = {
-  items: ItemProps[];
-  setItems: Dispatch<React.SetStateAction<ItemProps[]>>;
+  items: string[];
+  setItems: Dispatch<React.SetStateAction<string[]>>;
   setValue: Dispatch<React.SetStateAction<string>>;
   addChip: () => void;
-  deleteChip: (item: ItemProps) => () => void;
-  error: boolean;
+  deleteChip: (item: string) => void;
+  error: string;
   value: string;
 }
 
 const TagContext = createContext<TagContextProps>({
   addChip: () => console.error('no tag provider'),
-  deleteChip: () => () => console.error('no tag provider'),
+  deleteChip: () => console.error('no tag provider'),
   setItems: () => console.error('no tag provider'),
   setValue: () => console.log('no tag provider'),
   items: [],
-  error: false,
+  error: '',
   value: '',
 })
 
 export const TagProvider = ({ children }: WithChildren) => {
-  const [items, setItems] = useState<ItemProps[]>([]);
-  const [error, setError] = useState<boolean>(false);
+  const [items, setItems] = useState<string[]>([]);
+  const [error, setError] = useState<string>();
   const [value, setValue] = useState<string>();
 
   const addChip = () => {
     if (value.includes(';')) {
-      const splitedEmails = value.split(';').filter(
-        (elem, index, self) => emailRegex.test(elem) && index === self.indexOf(elem))
-        .map(labelEmail => ({
-          email: labelEmail,
-          id: generateRandomId()
-        }
-      ));
+      const splitedEmails = value.split(';').
+        filter((item, _, emails) => emailRegex.test(item) && emails.includes(item));
 
       setItems([...items, ...splitedEmails]);
       setValue('');
-      return setError(false);
+      setError('');
     }
 
-    if (emailRegex.test(value)) {
-      setItems([...items, {
-        email: value,
-        id: generateRandomId()
-      }]);
-      setValue('');
-      return setError(false);
+    if (!emailRegex.test(value)) {
+      setError('E-mail is not valid');
+      return;
     }
 
-    return setError(true);
+    if (items.includes(value)) {
+      setError('E-mail already registered');
+      return;
+    }
+    
+    setItems([...items, value]);
+    setValue('');
+    setError('');
   }
 
-  const deleteChip = (item: ItemProps) => () => {
-    const filteredItems = items.filter(({ id }) => id !== item.id);
+  const deleteChip = (item: string) => {
+    const filteredItems = items.filter((email) => email !== item);
 
     return setItems(filteredItems);
   }

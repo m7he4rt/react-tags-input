@@ -15,12 +15,11 @@ const useStyles = makeStyles({
     minHeight: '100vh',
   },
   card: {
-    minWidth: 800,
-    maxWidth: 800,
+    width: 'clamp(0px, 645px, 800px)',
     padding: 60,
   },
   media: {
-    height: 190,
+    height: 'clamp(0px, 145px, 190px)',
     marginBottom: 30,
   },
 });

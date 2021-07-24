@@ -4,10 +4,8 @@ import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 
 import { useTag } from "@/context/TagContext";
 
-import { ItemProps } from '@/common/Item';
-
 type TagsInputProps = {
-  tags?: ItemProps[]
+  tags?: string[]
 } & TextFieldProps;
 
 const TagsInput = ({
@@ -28,14 +26,16 @@ const TagsInput = ({
     setItems(tags);
   }, []);
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const lastItem = [...items].pop();
 
-    return {
-      "Tab": () => addChip(),
-      "Enter": () => addChip(),
-      "Backspace": deleteChip(lastItem)
-    }[event.key]?.()
+    if (event.key === "Tab" || event.key === "Enter") {
+      addChip();
+    }
+
+    if (event.key === "Backspace" && !value) {
+      deleteChip(lastItem);
+    }
   }
 
   return (
@@ -49,18 +49,18 @@ const TagsInput = ({
         >
           {items?.map((item) => (
             <Chip
-              key={`key-${item.email}-${item.id}`}
-              label={item.email}
-              onDelete={deleteChip(item)}
+              key={`key-${item}`}
+              label={item}
+              onDelete={() => deleteChip(item)}
             />
           ))}
         </Box>
       }}
-      error={error}
+      error={Boolean(error)}
       value={value || ''}
       fullWidth
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-      helperText={error ? "Email is not valid" : ""}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.currentTarget.value)}
+      helperText={error}
       onKeyDown={handleKeyDown}
       {...props}
     />
