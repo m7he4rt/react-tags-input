@@ -42,6 +42,7 @@ export const TagProvider = ({ children }: WithChildren) => {
       setItems([...items, ...splitedEmails]);
       setValue('');
       setError('');
+      return;
     }
 
     if (!emailRegex.test(value)) {
